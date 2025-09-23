@@ -16,24 +16,24 @@ bool isOp(char c) {
 int main() {
     string s;
     cout << "Enter infix expression: ";
-    cin >> s;   // takes input like A+B*C
+    cin >> s;   
 
     int n = s.size();
-    char st[100];  // stack array (fixed, simple)
+    char st[100];  
     int top = -1;
     string out = "";
 
     for (int i=0; i<n; i++) {
         char c = s[i];
         if (isalnum(c)) {
-            out += c;          // operand
+            out += c;          
         }
         else if (c == '(') {
             st[++top] = c;
         }
         else if (c == ')') {
             while (top >= 0 && st[top] != '(') out += st[top--];
-            top--;  // pop '('
+            top--;  
         }
         else if (isOp(c)) {
             while (top >= 0 && isOp(st[top]) &&
