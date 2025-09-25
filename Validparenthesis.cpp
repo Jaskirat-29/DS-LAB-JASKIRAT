@@ -1,9 +1,11 @@
 #include <stack>
+#include <string>
+using namespace std;
+
 class Solution {
 public:
     bool isValid(string s) {
-        stack<int> chars;
-        int top = -1;
+        stack<char> chars;
         for (char ch : s) {
             if (ch == '(' || ch == '[' || ch == '{') {
                 chars.push(ch);
@@ -11,16 +13,11 @@ public:
                 if (chars.empty()) {
                     return false;
                 }
-                char top = chars.top();
+                char topChar = chars.top();
                 chars.pop();
-                if (ch == ')' && top != '(') {
-
-                    return false;
-                }
-                if (ch == '}' && top != '{') {
-                    return false;
-                }
-                if (ch == ']' && top != '[') {
+                if ((ch == ')' && topChar != '(') ||
+                    (ch == '}' && topChar != '{') ||
+                    (ch == ']' && topChar != '[')) {
                     return false;
                 }
             }
@@ -28,3 +25,4 @@ public:
         return chars.empty();
     }
 };
+
