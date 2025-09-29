@@ -1,72 +1,45 @@
 #include <iostream>
+#include <cstring>
+#include <cctype>
 using namespace std;
 
-#define N 10
-char ele[N];
-int top = -1;
+#define MAX 100
 
-void push(char x) {
-    if (top == N - 1) {
-        cout << "Stack overflow\n";
-    } else {
-        ele[++top] = x;
-    }
-}
+class Stack {
+    int arr[MAX];
+    int top;
+public:
+    Stack() { top = -1; }
+    void push(int x) { arr[++top] = x; }
+    int pop() { return arr[top--]; }
+    bool empty() { return top == -1; }
+};
 
-char pop() {
-    if (top == -1) {
-        cout << "Underflow\n";
-        return 0;
-    } else {
-        return ele[top--];
-    }
-}
-
-int precedence(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    if (op == '^') return 3;
-    return 0;
-}
-
-bool isOperator(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
-}
-
-string infixtopostfix(string infix) {
-    string postfix = "";
-    for (char c : infix) {
-        if (!isOperator(c) && c != '(' && c != ')') {
-            postfix += c;
-        } else if (c == '(') {
-            push(c);
-        } else if (c == ')') {
-            while (top != -1 && ele[top] != '(') {
-                postfix += pop();
+int evaluatePostfix(string exp) {
+    Stack s;
+    for (int i = 0; i < exp.size(); i++) {
+        char c = exp[i];
+        if (c == ' ') continue;
+        if (isdigit(c)) {
+            s.push(c - '0');
+        } else {
+            int val2 = s.pop();
+            int val1 = s.pop();
+            switch (c) {
+                case '+': s.push(val1 + val2); break;
+                case '-': s.push(val1 - val2); break;
+                case '*': s.push(val1 * val2); break;
+                case '/': s.push(val1 / val2); break;
             }
-            if (top != -1 && ele[top] == '(') {
-                pop();
-            }
-        } else if (isOperator(c)) {
-            while (top != -1 && precedence(ele[top]) >= precedence(c)) {
-                postfix += pop();
-            }
-            push(c);
         }
     }
-    while (top != -1) {
-        postfix += pop();
-    }
-    return postfix;
+    return s.pop();
 }
 
 int main() {
-    string infix;
-    cout << "Enter infix expression: ";
-    cin >> infix;
-
-    string postfix = infixtopostfix(infix);
-    cout << "Postfix expression: " << postfix << "\n";
-
+    string exp;
+    cout << "Enter Postfix Expression: ";
+    getline(cin, exp);
+    cout << "Result: " << evaluatePostfix(exp) << "\n";
     return 0;
 }
