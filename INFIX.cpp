@@ -1,54 +1,57 @@
 #include <iostream>
 #include <string>
-#include <cctype>
 using namespace std;
-
-int prec(char c) {
+#define MAX 100
+class Stack {
+    char arr[MAX];
+    int top;
+public:
+    Stack() { top = -1; }
+    void push(char x) { arr[++top] = x; }
+    char pop() { return arr[top--]; }
+    char peek() { return arr[top]; }
+    bool empty() { return top == -1; }
+};
+int precedence(char c) {
     if (c == '^') return 3;
     if (c == '*' || c == '/') return 2;
     if (c == '+' || c == '-') return 1;
-    return 0;
+    return -1;
 }
-bool isOp(char c) {
-    return c=='+'||c=='-'||c=='*'||c=='/'||c=='^';
-}
-
-int main() {
-    string s;
-    cout << "Enter infix expression: ";
-    cin >> s;   
-
-    int n = s.size();
-    char st[100];  
-    int top = -1;
-    string out = "";
-
-    for (int i=0; i<n; i++) {
-        char c = s[i];
-        if (isalnum(c)) {
-            out += c;          
+string infixToPostfix(string exp) {
+    Stack s;
+    string result = "";
+    for (int i = 0; i < exp.size(); i++) {
+        char c = exp[i];
+        if (c == ' ') continue;
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || isdigit(c)) {
+            result += c;
         }
         else if (c == '(') {
-            st[++top] = c;
+            s.push(c);
         }
         else if (c == ')') {
-            while (top >= 0 && st[top] != '(') out += st[top--];
-            top--;  
-        }
-        else if (isOp(c)) {
-            while (top >= 0 && isOp(st[top]) &&
-                   (prec(st[top]) > prec(c) ||
-                   (prec(st[top]) == prec(c) && c != '^'))) {
-                out += st[top--];
+            while (!s.empty() && s.peek() != '(') {
+                result += s.pop();
             }
-            st[++top] = c;
+            if (!s.empty() && s.peek() == '(') s.pop();
+        }
+        else {
+            while (!s.empty() && precedence(s.peek()) >= precedence(c)) {
+                result += s.pop();
+            }
+            s.push(c);
         }
     }
-    while (top >= 0) {
-        if (st[top] != '(') out += st[top];
-        top--;
+    while (!s.empty()) {
+        result += s.pop();
     }
-
-    cout << "Postfix: " << out << endl;
+    return result;
+}
+int main() {
+    string exp;
+    cout << "Enter Infix Expression: ";
+    cin >> exp;
+    cout << "Postfix: " << infixToPostfix(exp) << "\n";
     return 0;
 }
