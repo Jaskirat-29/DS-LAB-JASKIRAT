@@ -54,37 +54,6 @@ void display(){
         }
     }
 }
-
-// void insert_pos(){
-//     int item, pos;
-//     cout << "Enter value to insert: ";
-//     cin >> item;
-//     cout << "Enter the position to insert at: ";
-//     cin >> pos;
-
-//     struct node *new_node = createnewnode(item);
-
-//     if(pos == 1){
-//         new_node->next = start;
-//         start = new_node;
-//         return;
-//     }
-
-//     struct node *temp = start;
-//     for(int i = 1; i < pos - 1 && temp != NULL; i++){
-//         temp = temp->next;
-//     }
-
-//     if(temp == NULL){
-//         cout << "Position out of bounds\n";
-//         free(new_node);
-//         return;
-//     }
-
-//     new_node->next = temp->next;
-//     temp->next = new_node;
-//     cout << "Item inserted at position " << pos << "\n";
-// }
 void delet (){
     if (start == NULL){
         cout << "Linked list is empty\n";
