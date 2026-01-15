@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
-
 #define MAX 100
-
 class Stack {
     char arr[MAX];
     int top;
@@ -14,7 +12,6 @@ public:
     bool empty() { return top == -1; }
     char peek() { return arr[top]; }
 };
-
 bool isBalanced(string exp) {
     Stack s;
     for (int i = 0; i < exp.size(); i++) {
@@ -33,7 +30,6 @@ bool isBalanced(string exp) {
     }
     return s.empty();
 }
-
 int main() {
     string exp;
     cout << "Enter expression: ";
